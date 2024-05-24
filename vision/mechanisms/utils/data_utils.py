@@ -145,7 +145,7 @@ def load_image_data(dir: str, ds_name: str, flatten: bool = True, subset = False
     return (x_train, y_train), (x_test, y_test)
 
 
-def load_image_data_tfds(dataset: str, flatten: bool = True, num_examples: int = 1000):
+def load_image_data_tfds(dataset: str, flatten: bool = True, subset = True, num_examples: int = 1000):
     """
     Description: loads existing dataset from a directory
 
@@ -174,12 +174,18 @@ def load_image_data_tfds(dataset: str, flatten: bool = True, num_examples: int =
       x_test = x_test.reshape((x_test.shape[0], -1))
     
     # consider a subset of the existing dataset
-    if num_examples < x_train.shape[0]:
+    if subset:
       x_train = x_train[:num_examples]
       y_train = y_train[:num_examples]
-
-    if num_examples < x_test.shape[0]:
+    
       x_test = x_test[:num_examples]
       y_test = y_test[:num_examples]
       
+    # move the dataset to the GPU memory
+    x_train = jnp.asarray(x_train)
+    y_train = jnp.asarray(y_train)
+
+    x_test = jnp.asarray(x_test)
+    y_test = jnp.asarray(y_test)
+
     return (x_train, y_train), (x_test, y_test)
