@@ -266,7 +266,7 @@ elif config.cluster == 'zaratan':
 else:
     config.ds_dir = 'datasets'
 
-(x_train, y_train), (x_test, y_test) = data_utils.load_image_data(config.ds_dir, config.dataset, flatten = False, subset = False)
+(x_train, y_train), (x_test, y_test) = data_utils.load_image_data_tfds(config.ds_dir, config.dataset, flatten = False, subset = False)
 
 config.num_train, config.num_test = x_train.shape[0], x_test.shape[0]
 
