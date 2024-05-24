@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax
 import pickle as pl
+import tensorflow_datasets as tfds
 
 def _one_hot(x, k, dtype = jnp.float32):
   """Create a one-hot encoding of x of size k."""
