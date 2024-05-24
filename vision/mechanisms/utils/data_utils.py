@@ -145,3 +145,41 @@ def load_image_data(dir: str, ds_name: str, flatten: bool = True, subset = False
     return (x_train, y_train), (x_test, y_test)
 
 
+def load_image_data_tfds(dataset: str, flatten: bool = True, num_examples: int = 1000):
+    """
+    Description: loads existing dataset from a directory
+
+    Inputs: 
+      1. dir: directory where the data is saved
+      2. dataset: dataset name, the existing file should be dataset.dump
+      3. num_examples: num_examples required
+    """
+    if dataset in ['cifar100', 'cifar10', 'mnist', 'fashion_mnist']:
+        ds_train, ds_test = tfds.as_numpy(tfds.load(dataset, data_dir = './',split = ["train", "test"], batch_size = -1, as_dataset_kwargs = {"shuffle_files": False}))
+    else:
+        raise ValueError("Invalid dataset name.")
+
+    x_train, y_train, x_test, y_test = (ds_train["image"], ds_train["label"], ds_test["image"], ds_test["label"])
+
+    x_train = jnp.asarray(x_train, dtype = jnp.float32)
+    y_train = jnp.asarray(y_train, dtype = jnp.int32)
+
+    x_test = jnp.asarray(x_test, dtype = jnp.float32)
+    y_test = jnp.asarray(y_test, dtype = jnp.int32)
+
+
+    # Flatten the image for FCNs
+    if flatten:
+      x_train = x_train.reshape((x_train.shape[0], -1))
+      x_test = x_test.reshape((x_test.shape[0], -1))
+    
+    # consider a subset of the existing dataset
+    if num_examples < x_train.shape[0]:
+      x_train = x_train[:num_examples]
+      y_train = y_train[:num_examples]
+
+    if num_examples < x_test.shape[0]:
+      x_test = x_test[:num_examples]
+      y_test = y_test[:num_examples]
+      
+    return (x_train, y_train), (x_test, y_test)
