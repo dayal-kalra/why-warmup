@@ -156,7 +156,7 @@ def load_image_data_tfds(dataset: str, flatten: bool = True, subset = True, num_
       3. num_examples: num_examples required
     """
     if dataset in ['cifar100', 'cifar10', 'mnist', 'fashion_mnist']:
-        ds_train, ds_test = tfds.as_numpy(tfds.load(dataset, data_dir = './',split = ["train", "test"], batch_size = -1, as_dataset_kwargs = {"shuffle_files": False}))
+        ds_train, ds_test = tfds.as_numpy(tfds.load(dataset, data_dir='./', split=["train", "test"], batch_size=-1, as_dataset_kwargs={"shuffle_files": False}, verbose=False ))
     else:
         raise ValueError("Invalid dataset name.")
 
